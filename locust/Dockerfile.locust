@@ -1,0 +1,9 @@
+FROM python:3.10-slim
+
+WORKDIR /locust
+
+COPY locustfile.py /locust/locustfile.py
+
+RUN pip install locust
+
+CMD ["locust", "-f", "/locust/locustfile.py"]
