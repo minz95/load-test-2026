@@ -1,0 +1,30 @@
+airflow:
+  image:
+    repository: apache/airflow
+    tag: "2.9.0"
+  extraPipPackages:
+    # Locust를 Airflow 컨테이너 안에 설치
+    - locust
+
+webserver:
+  defaultUser:
+    enabled: true
+    username: admin
+    password: admin
+    role: Admin
+    email: admin@example.com
+  service:
+    type: NodePort
+    ports:
+      - name: airflow-ui
+        port: 8080
+        targetPort: 8080
+        nodePort: 30080
+
+dags:
+  # DAG 제공 방식(예: gitSync, PV 마운트 등)은
+  # 클러스터 환경에 맞게 별도로 설정해야 함.
+  # 이 values 파일은 주로 "locust 설치 + 기본 계정"에 초점을 둠.
+  persistence:
+    enabled: false
+

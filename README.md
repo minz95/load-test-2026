@@ -113,3 +113,29 @@ locust -f locust/locust.py \
   --host http://api-service
 ```
 
+### 5. Helm Chart 로 Airflow 배포 (선택)
+
+클러스터에 Apache Airflow 공식 Helm Chart를 사용하는 경우, `airflow/airflow-values.yaml` 을 함께 사용할 수 있습니다.
+
+1) Airflow Helm 리포 추가:
+
+```bash
+helm repo add apache-airflow https://airflow.apache.org
+helm repo update
+```
+
+2) Helm으로 Airflow 설치 (locust 포함):
+
+```bash
+helm install airflow apache-airflow/airflow \
+  -n load-test --create-namespace \
+  -f airflow/airflow-values.yaml
+```
+
+- 이 values 파일은
+  - Airflow 이미지 버전(2.9.0)
+  - 컨테이너 내부에 `locust` 설치
+  - 기본 관리자 계정 (`admin` / `admin`)
+  를 설정합니다.
+- DAG 제공 방식(예: gitSync, PV, ConfigMap)은 클러스터 환경에 맞게 추가로 설정해야 합니다.
+
